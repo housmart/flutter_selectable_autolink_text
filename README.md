@@ -1,4 +1,7 @@
 # Selectable Autolink Text
+
+[![pub package](https://img.shields.io/pub/v/selectable_autolink_text.svg)](https://pub.dartlang.org/packages/selectable_autolink_text)
+
 Generate inline links that can be selected, clicked and long pressed in text for Flutter
 
 ![Example](https://github.com/housmart/flutter_selectable_autolink_text/raw/master/example/screen.gif)
@@ -9,7 +12,7 @@ Install by adding this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_selectable_autolink_text: ^1.0.0+1
+  selectable_autolink_text: ^1.0.0+1
 ```
 
 ## Usage
