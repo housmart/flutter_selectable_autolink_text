@@ -33,15 +33,21 @@ class MyHomePage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             SelectableAutoLinkText(
+              'Basic https://flutter.dev',
+              linkStyle: TextStyle(color: Colors.blueAccent),
+              onTap: (url) => print('🍅Tap: $url'),
+              onLongPress: (url) => print('🍕LongPress: $url'),
+            ),
+            SizedBox(height: 32),
+            SelectableAutoLinkText(
               '''
 Selectable Autolink Text https://github.com/housmart/flutter_selectable_autolink_text
 for Flutter https://flutter.dev
 tel:012-3456-7890
 tel +81-12-3456-7890
-email mail@example.com
-''',
+email mail@example.com''',
               style: TextStyle(color: Colors.black87),
-              linkStyle: TextStyle(color: Colors.blueAccent),
+              linkStyle: TextStyle(color: Colors.purpleAccent),
               onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
               onTap: (url) async {
                 print('🌶Tap: $url');
@@ -54,7 +60,7 @@ email mail@example.com
                 Share.share(url);
               },
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 32),
             SelectableAutoLinkText(
               'Custom link @screen_name. Hello #hash_tag! Like https://twitter.com.',
               style: TextStyle(color: Colors.brown),
@@ -62,8 +68,8 @@ email mail@example.com
               linkRegExpPattern:
                   '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
               onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
-              onTap: (url) => print('🍅Tap: $url'),
-              onLongPress: (url) => print('🥝LongPress: $url'),
+              onTap: (url) => print('🍒Tap: $url'),
+              onLongPress: (url) => print('🍩LongPress: $url'),
               onDebugMatch: (match) => print(
                   'DebugMatch:[${match.start}-${match.end}]`${match.group(0)}`'),
             ),
