@@ -8,12 +8,7 @@ Generate inline links that can be selected, clicked and long pressed in text for
 
 ## Install
 
-Install by adding this package to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  selectable_autolink_text: ^1.0.0+1
-```
+https://pub.dev/packages/selectable_autolink_text#-installing-tab-
 
 ## Usage
 
