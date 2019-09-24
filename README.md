@@ -78,7 +78,6 @@ class MyHomePage extends StatelessWidget {
       style: TextStyle(color: Colors.brown),
       linkStyle: TextStyle(color: Colors.orangeAccent),
       linkRegExpPattern: '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
-      onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
       onTap: (url) => print('🍒Tap: $url'),
       onLongPress: (url) => print('🍩LongPress: $url'),
       onDebugMatch: (match) =>

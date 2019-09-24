@@ -67,7 +67,10 @@ email mail@example.com''',
               linkStyle: TextStyle(color: Colors.orangeAccent),
               linkRegExpPattern:
                   '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
-              onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
+              onTransformDisplayLink: (url) {
+                if (url.startsWith('#')) return url;
+                return AutoLinkUtils.shrinkUrl(url);
+              },
               onTap: (url) => print('🍒Tap: $url'),
               onLongPress: (url) => print('🍩LongPress: $url'),
               onDebugMatch: (match) => print(
