@@ -21,11 +21,14 @@ class AutoLinkUtils {
   static String shrinkUrl(String url) {
     try {
       final uri = Uri.parse(url);
-      var displayUrl = '${uri.host}${uri.path}';
-      if (displayUrl.length > 30) {
-        displayUrl = '${displayUrl.substring(0, 29)}…';
+      final displayUrl = '${uri.host}${uri.path}';
+      if (displayUrl.isEmpty) {
+        return url;
+      } else if (displayUrl.length > 30) {
+        return '${displayUrl.substring(0, 29)}…';
+      } else {
+        return displayUrl;
       }
-      return displayUrl;
     } on FormatException catch (_) {
       return url;
     }

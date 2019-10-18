@@ -42,6 +42,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectableAutoLinkText(
       '''
+Advanced
 Selectable Autolink Text https://github.com/housmart/flutter_selectable_autolink_text
 for Flutter https://flutter.dev
 tel:012-3456-7890
@@ -78,6 +79,7 @@ class MyHomePage extends StatelessWidget {
       style: TextStyle(color: Colors.brown),
       linkStyle: TextStyle(color: Colors.orangeAccent),
       linkRegExpPattern: '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
+      onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
       onTap: (url) => print('🍒Tap: $url'),
       onLongPress: (url) => print('🍩LongPress: $url'),
       onDebugMatch: (match) =>
