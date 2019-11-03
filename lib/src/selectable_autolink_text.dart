@@ -1,39 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'autolink_utils.dart';
 import 'selectable_text_ex.dart';
 import 'tap_and_long_press.dart';
+import 'text_attr.dart';
 import 'text_element.dart';
 
 typedef OnOpenLinkFunction = void Function(String link);
 typedef OnTransformLinkFunction = String Function(String link);
+typedef OnTransformTextAttributeFunction = TextAttribute Function(String text);
 typedef OnDebugMatchFunction = void Function(Match match);
-
-class AutoLinkUtils {
-  AutoLinkUtils._();
-
-  static const urlRegExpPattern = r'https?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?';
-  static const phoneNumberRegExpPattern = r'[+0]\d+[\d-]+\d';
-  static const emailRegExpPattern = r'[^@\s]+@([^@\s]+\.)+[^@\W]+';
-  static const _defaultLinkRegExpPattern =
-      '($urlRegExpPattern|$phoneNumberRegExpPattern|$emailRegExpPattern)';
-
-  static String shrinkUrl(String url) {
-    try {
-      final uri = Uri.parse(url);
-      final displayUrl = '${uri.host}${uri.path}';
-      if (displayUrl.isEmpty) {
-        return url;
-      } else if (displayUrl.length > 30) {
-        return '${displayUrl.substring(0, 29)}…';
-      } else {
-        return displayUrl;
-      }
-    } on FormatException catch (_) {
-      return url;
-    }
-  }
-}
 
 class SelectableAutoLinkText extends StatefulWidget {
   /// Text to be auto link
@@ -46,6 +23,7 @@ class SelectableAutoLinkText extends StatefulWidget {
   /// Transform the display of Link
   /// Called when Link is displayed
   final OnTransformLinkFunction onTransformDisplayLink;
+  final OnTransformTextAttributeFunction onTransformDisplayTextAttr;
 
   /// Called when the user taps on link.
   final OnOpenLinkFunction onTap;
@@ -112,6 +90,7 @@ class SelectableAutoLinkText extends StatefulWidget {
     Key key,
     String linkRegExpPattern,
     this.onTransformDisplayLink,
+    this.onTransformDisplayTextAttr,
     this.onTap,
     this.onLongPress,
     this.linkStyle,
@@ -132,8 +111,8 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.scrollPhysics,
     this.textWidthBasis,
     this.onDebugMatch,
-  })  : linkRegExp = RegExp(
-            linkRegExpPattern ?? AutoLinkUtils._defaultLinkRegExpPattern),
+  })  : linkRegExp =
+            RegExp(linkRegExpPattern ?? AutoLinkUtils.defaultLinkRegExpPattern),
         super(key: key);
 
   @override
@@ -221,11 +200,25 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
     _clearGestureRecognizers();
     return _generateElements(widget.text).map(
       (e) {
-        final isLink = e.type == TextElementType.link;
+        var isLink = e.type == TextElementType.link;
+        String text;
+        TextStyle style;
+        String link;
+        if (widget.onTransformDisplayTextAttr != null) {
+          final textAttr = widget.onTransformDisplayTextAttr(e.text);
+          text = textAttr?.text;
+          style = textAttr?.style;
+          link = textAttr?.link;
+          isLink = link != null;
+        }
+        text = text ?? e.text;
+        style = style ?? (isLink ? widget.linkStyle : widget.style);
+        link = link ?? text;
+
         return TextSpan(
-          text: isLink ? _transformDisplayLink(e.text) : e.text,
-          style: isLink ? widget.linkStyle : widget.style,
-          recognizer: isLink ? _createGestureRecognizer(e.text) : null,
+          text: isLink ? _transformDisplayLink(text) : text,
+          style: style,
+          recognizer: isLink ? _createGestureRecognizer(link) : null,
         );
       },
     ).toList();

@@ -1,3 +1,7 @@
+## [1.1.0] - 2019-11-03
+
+* Add More advanced usage
+
 ## [1.0.1] - 2019-10-18
 
 * Modify AutoLinkUtils.shrinkUrl
