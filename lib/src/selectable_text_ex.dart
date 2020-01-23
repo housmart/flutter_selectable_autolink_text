@@ -111,6 +111,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
       if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
         _cancelDoubleTapDown = true;
         recognizer.onTap();
+        return;
       }
     }
     if (_state.widget.onTap != null) _state.widget.onTap();

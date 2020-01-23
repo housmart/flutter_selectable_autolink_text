@@ -1,3 +1,7 @@
+## [1.1.1] - 2020-01-23
+
+* Add onTapOther
+
 ## [1.1.0] - 2019-11-03
 
 * Add More advanced usage

@@ -62,6 +62,8 @@ Selectable Autolink Text https://github.com/housmart/flutter_selectable_autolink
 for Flutter https://flutter.dev
 tel:012-3456-7890
 email mail@example.com
+normal text
+normal text
 ''',
       style: TextStyle(color: Colors.black87),
       linkStyle: TextStyle(color: Colors.purpleAccent),
@@ -75,6 +77,9 @@ email mail@example.com
       onLongPress: (url) {
         print('🍔LongPress: $url');
         Share.share(url);
+      },
+      onTapOther: () {
+        print('🍇️onTapOther');
       },
     );
   }

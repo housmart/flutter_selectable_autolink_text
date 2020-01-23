@@ -28,8 +28,11 @@ class SelectableAutoLinkText extends StatefulWidget {
   /// Called when the user taps on link.
   final OnOpenLinkFunction onTap;
 
-  /// Called when a long press gesture on link.
+  /// Called when the user long-press on link.
   final OnOpenLinkFunction onLongPress;
+
+  /// Called when the user taps on non-link.
+  final GestureTapCallback onTapOther;
 
   /// Style of link text
   final TextStyle linkStyle;
@@ -93,6 +96,7 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.onTransformDisplayTextAttr,
     this.onTap,
     this.onLongPress,
+    this.onTapOther,
     this.linkStyle,
     this.focusNode,
     this.style,
@@ -150,6 +154,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       toolbarOptions: widget.toolbarOptions,
       scrollPhysics: widget.scrollPhysics,
       textWidthBasis: widget.textWidthBasis,
+      onTap: widget.onTapOther,
     );
   }
 
