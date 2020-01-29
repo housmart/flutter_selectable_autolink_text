@@ -9,7 +9,8 @@ import 'text_element.dart';
 
 typedef OnOpenLinkFunction = void Function(String link);
 typedef OnTransformLinkFunction = String Function(String link);
-typedef OnTransformTextAttributeFunction = TextAttribute Function(String text);
+typedef OnTransformTextAttributeFunction = TextAttribute Function(
+    String text, bool isLink);
 typedef OnDebugMatchFunction = void Function(Match match);
 
 class SelectableAutoLinkText extends StatefulWidget {
@@ -210,7 +211,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
         TextStyle style;
         String link;
         if (widget.onTransformDisplayTextAttr != null) {
-          final textAttr = widget.onTransformDisplayTextAttr(e.text);
+          final textAttr = widget.onTransformDisplayTextAttr(e.text, isLink);
           text = textAttr?.text;
           style = textAttr?.style;
           link = textAttr?.link;
