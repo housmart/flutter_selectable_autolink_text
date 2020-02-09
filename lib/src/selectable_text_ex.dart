@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:selectable_autolink_text/src/highlighted_text_span.dart';
 
 import 'tap_and_long_press.dart';
 
@@ -55,6 +56,17 @@ class _SelectableTextSelectionGestureDetectorBuilder
   var _cancelSingleLongTapEnd = false;
 
   @override
+  void onTapDown(TapDownDetails details) {
+    final position = renderEditable.getPositionForPoint(details.globalPosition);
+    final span = renderEditable.text.getSpanForPosition(position);
+    if (span is HighlightedTextSpan) {
+      span.isHighlighted = true;
+      renderEditable.systemFontsDidChange();
+    }
+    super.onTapDown(details);
+  }
+
+  @override
   void onForcePressStart(ForcePressDetails details) {
     super.onForcePressStart(details);
     if (delegate.selectionEnabled && shouldShowSelectionToolbar) {
@@ -68,53 +80,42 @@ class _SelectableTextSelectionGestureDetectorBuilder
   }
 
   @override
-  void onSingleLongTapMoveUpdate(LongPressMoveUpdateDetails details) {
-    if (delegate.selectionEnabled) {
-      switch (Theme.of(_state.context).platform) {
-        case TargetPlatform.iOS:
-          renderEditable.selectPositionAt(
-            from: details.globalPosition,
-            cause: SelectionChangedCause.longPress,
-          );
-          break;
-        case TargetPlatform.android:
-        case TargetPlatform.fuchsia:
-          renderEditable.selectWordsInRange(
-            from: details.globalPosition - details.offsetFromOrigin,
-            to: details.globalPosition,
-            cause: SelectionChangedCause.longPress,
-          );
-          break;
+  void onSingleTapUp(TapUpDetails details) {
+    try {
+      _cancelDoubleTapDown = false;
+      editableText.hideToolbar();
+      if (delegate.selectionEnabled) {
+        switch (Theme.of(_state.context).platform) {
+          case TargetPlatform.iOS:
+            renderEditable.selectWordEdge(cause: SelectionChangedCause.tap);
+            break;
+          case TargetPlatform.android:
+          case TargetPlatform.fuchsia:
+            renderEditable.selectPosition(cause: SelectionChangedCause.tap);
+            break;
+        }
       }
+      final position =
+          renderEditable.getPositionForPoint(details.globalPosition);
+      final span = renderEditable.text.getSpanForPosition(position);
+      if (span is TextSpan) {
+        final recognizer = span.recognizer;
+        if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
+          _cancelDoubleTapDown = true;
+          recognizer.onTap();
+          return;
+        }
+      }
+      if (_state.widget.onTap != null) _state.widget.onTap();
+    } finally {
+      _clearHighlight();
     }
   }
 
   @override
-  void onSingleTapUp(TapUpDetails details) {
-    _cancelDoubleTapDown = false;
-    editableText.hideToolbar();
-    if (delegate.selectionEnabled) {
-      switch (Theme.of(_state.context).platform) {
-        case TargetPlatform.iOS:
-          renderEditable.selectWordEdge(cause: SelectionChangedCause.tap);
-          break;
-        case TargetPlatform.android:
-        case TargetPlatform.fuchsia:
-          renderEditable.selectPosition(cause: SelectionChangedCause.tap);
-          break;
-      }
-    }
-    final position = renderEditable.getPositionForPoint(details.globalPosition);
-    final span = renderEditable.text.getSpanForPosition(position);
-    if (span is TextSpan) {
-      final recognizer = span.recognizer;
-      if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
-        _cancelDoubleTapDown = true;
-        recognizer.onTap();
-        return;
-      }
-    }
-    if (_state.widget.onTap != null) _state.widget.onTap();
+  void onSingleTapCancel() {
+    _clearHighlight();
+    super.onSingleTapCancel();
   }
 
   @override
@@ -154,9 +155,24 @@ class _SelectableTextSelectionGestureDetectorBuilder
   }
 
   @override
-  void onDoubleTapDown(TapDownDetails details) {
-    if (!_cancelDoubleTapDown) {
-      super.onDoubleTapDown(details);
+  void onSingleLongTapMoveUpdate(LongPressMoveUpdateDetails details) {
+    if (delegate.selectionEnabled) {
+      switch (Theme.of(_state.context).platform) {
+        case TargetPlatform.iOS:
+          renderEditable.selectPositionAt(
+            from: details.globalPosition,
+            cause: SelectionChangedCause.longPress,
+          );
+          break;
+        case TargetPlatform.android:
+        case TargetPlatform.fuchsia:
+          renderEditable.selectWordsInRange(
+            from: details.globalPosition - details.offsetFromOrigin,
+            to: details.globalPosition,
+            cause: SelectionChangedCause.longPress,
+          );
+          break;
+      }
     }
   }
 
@@ -164,6 +180,36 @@ class _SelectableTextSelectionGestureDetectorBuilder
   void onSingleLongTapEnd(LongPressEndDetails details) {
     if (!_cancelSingleLongTapEnd) {
       super.onSingleLongTapEnd(details);
+    }
+  }
+
+  @override
+  void onDoubleTapDown(TapDownDetails details) {
+    _clearHighlight();
+    if (!_cancelDoubleTapDown) {
+      super.onDoubleTapDown(details);
+    }
+  }
+
+  @override
+  void onDragSelectionStart(DragStartDetails details) {
+    super.onDragSelectionStart(details);
+  }
+
+  @override
+  void onDragSelectionUpdate(
+      DragStartDetails startDetails, DragUpdateDetails updateDetails) {
+    super.onDragSelectionUpdate(startDetails, updateDetails);
+  }
+
+  @override
+  void onDragSelectionEnd(DragEndDetails details) {
+    super.onDragSelectionEnd(details);
+  }
+
+  void _clearHighlight() {
+    if (HighlightedTextSpan.clearHighlight(renderEditable.text)) {
+      renderEditable.systemFontsDidChange();
     }
   }
 }
@@ -565,8 +611,8 @@ class _SelectableTextExState extends State<SelectableTextEx>
   Widget build(BuildContext context) {
     super.build(context); // See AutomaticKeepAliveClientMixin.
     assert(() {
-      return _controller._textSpan
-          .visitChildren((InlineSpan span) => span.runtimeType == TextSpan);
+      return _controller._textSpan.visitChildren((InlineSpan span) =>
+          span is TextSpan); //span.runtimeType == TextSpan);
     }(),
         'SelectableText only supports TextSpan; Other type of InlineSpan is not allowed');
     assert(debugCheckHasMediaQuery(context));
