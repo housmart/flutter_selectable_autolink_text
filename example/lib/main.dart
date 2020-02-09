@@ -53,8 +53,8 @@ class MyHomePage extends StatelessWidget {
       'long pressed and highlighted on tap.\n'
       'As written below.\n'
       'Dart packages https://pub.dev',
-      linkStyle: TextStyle(color: Colors.blueAccent),
-      highlightedLinkStyle: TextStyle(
+      linkStyle: const TextStyle(color: Colors.blueAccent),
+      highlightedLinkStyle: const TextStyle(
         color: Colors.blueAccent,
         backgroundColor: Color(0x33448AFF),
       ),
@@ -70,9 +70,9 @@ Advanced
 You can shrink url like https://github.com/miyakeryo/flutter_selectable_autolink_text
 tel: 012-3456-7890
 email: mail@example.com''',
-      style: TextStyle(color: Colors.green[800]),
-      linkStyle: TextStyle(color: Colors.purpleAccent),
-      highlightedLinkStyle: TextStyle(
+      style: const TextStyle(color: Color(0xFF2E7D32)),
+      linkStyle: const TextStyle(color: Colors.purpleAccent),
+      highlightedLinkStyle: const TextStyle(
         color: Colors.purpleAccent,
         backgroundColor: Color(0x33E040FB),
       ),
@@ -101,10 +101,10 @@ email: mail@example.com''',
       '\nHi! @screen_name.'
       ' If you customize the regular expression, you can make them.'
       ' #hash_tag',
-      style: TextStyle(color: Colors.black87),
-      linkStyle: TextStyle(color: Colors.orangeAccent[700]),
-      highlightedLinkStyle: TextStyle(
-        color: Colors.orangeAccent[700],
+      style: const TextStyle(color: Colors.black87),
+      linkStyle: const TextStyle(color: Color(0xFFFF6D00)),
+      highlightedLinkStyle: const TextStyle(
+        color: Color(0xFFFF6D00),
         backgroundColor: Color(0x33FF6D00),
       ),
       linkRegExpPattern: '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
@@ -175,7 +175,7 @@ This text is normal
   }
 
   Future _alert(BuildContext context, String title, [String message]) async {
-    return await showDialog<void>(
+    return await showDialog(
       context: context,
       builder: (c) {
         return AlertDialog(
@@ -186,7 +186,7 @@ This text is normal
               color: Colors.lightBlueAccent,
               textColor: Colors.white,
               child: const Text('Close'),
-              onPressed: () => Navigator.pop(c, true),
+              onPressed: () => Navigator.pop(c),
             ),
           ],
         );
