@@ -1,15 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:selectable_autolink_text/src/highlighted_text_span.dart';
 
 import 'autolink_utils.dart';
+import 'link_attr.dart';
 import 'selectable_text_ex.dart';
 import 'tap_and_long_press.dart';
-import 'text_attr.dart';
 import 'text_element.dart';
 
 typedef OnOpenLinkFunction = void Function(String link);
 typedef OnTransformLinkFunction = String Function(String link);
-typedef OnTransformTextAttributeFunction = TextAttribute Function(String text);
+typedef OnTransformLinkAttributeFunction = LinkAttribute Function(String text);
 typedef OnDebugMatchFunction = void Function(Match match);
 
 class SelectableAutoLinkText extends StatefulWidget {
@@ -22,8 +23,7 @@ class SelectableAutoLinkText extends StatefulWidget {
 
   /// Transform the display of Link
   /// Called when Link is displayed
-  final OnTransformLinkFunction onTransformDisplayLink;
-  final OnTransformTextAttributeFunction onTransformDisplayTextAttr;
+  final OnTransformLinkAttributeFunction onTransformDisplayLink;
 
   /// Called when the user taps on link.
   final OnOpenLinkFunction onTap;
@@ -36,6 +36,9 @@ class SelectableAutoLinkText extends StatefulWidget {
 
   /// Style of link text
   final TextStyle linkStyle;
+
+  /// Style of highlighted link text
+  final TextStyle highlightedLinkStyle;
 
   /// {@macro flutter.material.SelectableText.focusNode}
   final FocusNode focusNode;
@@ -93,11 +96,11 @@ class SelectableAutoLinkText extends StatefulWidget {
     Key key,
     String linkRegExpPattern,
     this.onTransformDisplayLink,
-    this.onTransformDisplayTextAttr,
     this.onTap,
     this.onLongPress,
     this.onTapOther,
     this.linkStyle,
+    this.highlightedLinkStyle,
     this.focusNode,
     this.style,
     this.strutStyle,
@@ -206,33 +209,22 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
     return _generateElements(widget.text).map(
       (e) {
         var isLink = e.type == TextElementType.link;
-        String text;
-        TextStyle style;
-        String link;
-        if (widget.onTransformDisplayTextAttr != null) {
-          final textAttr = widget.onTransformDisplayTextAttr(e.text);
-          text = textAttr?.text;
-          style = textAttr?.style;
-          link = textAttr?.link;
-          isLink = link != null;
-        }
-        text = text ?? e.text;
-        style = style ?? (isLink ? widget.linkStyle : widget.style);
-        link = link ?? text;
+        final linkAttr = (isLink && widget.onTransformDisplayLink != null)
+            ? widget.onTransformDisplayLink(e.text)
+            : null;
+        final link = linkAttr != null ? linkAttr?.link : e.text;
+        isLink &= link != null;
 
-        return TextSpan(
-          text: isLink ? _transformDisplayLink(text) : text,
-          style: style,
+        return HighlightedTextSpan(
+          text: linkAttr?.text ?? e.text,
+          style: linkAttr?.style ?? (isLink ? widget.linkStyle : widget.style),
+          highlightedStyle: isLink
+              ? (linkAttr?.highlightedStyle ?? widget.highlightedLinkStyle)
+              : null,
           recognizer: isLink ? _createGestureRecognizer(link) : null,
         );
       },
     ).toList();
-  }
-
-  String _transformDisplayLink(String link) {
-    return widget.onTransformDisplayLink != null
-        ? widget.onTransformDisplayLink(link)
-        : link;
   }
 
   TapAndLongPressGestureRecognizer _createGestureRecognizer(String link) {
