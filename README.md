@@ -4,7 +4,7 @@
 
 Generate inline links that can be selected and tapped in text for Flutter
 
-![Example](https://github.com/housmart/flutter_selectable_autolink_text/raw/master/example/screen.gif)
+![Example](https://github.com/miyakeryo/flutter_selectable_autolink_text/raw/master/example/screen.png)
 
 ## Install
 
