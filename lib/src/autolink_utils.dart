@@ -1,4 +1,4 @@
-import 'package:selectable_autolink_text/selectable_autolink_text.dart';
+import 'link_attr.dart';
 
 class AutoLinkUtils {
   AutoLinkUtils._();

@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:selectable_autolink_text/src/highlighted_text_span.dart';
 
 import 'autolink_utils.dart';
+import 'highlighted_text_span.dart';
 import 'link_attr.dart';
 import 'selectable_text_ex.dart';
 import 'tap_and_long_press.dart';
@@ -32,7 +32,7 @@ class SelectableAutoLinkText extends StatefulWidget {
   final OnOpenLinkFunction onLongPress;
 
   /// Called when the user taps on non-link.
-  final GestureTapCallback onTapOther;
+  final GesturePointCallback onTapOther;
 
   /// Style of link text
   final TextStyle linkStyle;
