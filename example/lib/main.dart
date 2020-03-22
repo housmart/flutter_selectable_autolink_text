@@ -89,8 +89,8 @@ email: mail@example.com''',
         print('🍔LongPress: $url');
         Share.share(url);
       },
-      onTapOther: () {
-        print('🍇️onTapOther');
+      onTapOther: (point) {
+        print('🍇️onTapOther: $point');
       },
     );
   }

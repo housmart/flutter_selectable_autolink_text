@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:selectable_autolink_text/src/highlighted_text_span.dart';
 
+import 'highlighted_text_span.dart';
 import 'tap_and_long_press.dart';
 
 /// An eyeballed value that moves the cursor slightly left of where it is
@@ -20,6 +20,8 @@ import 'tap_and_long_press.dart';
 /// This value is in device pixels, not logical pixels as is typically used
 /// throughout the codebase.
 const int iOSHorizontalOffset = -2;
+
+typedef GesturePointCallback = void Function(Offset point);
 
 class _TextSpanEditingController extends TextEditingController {
   _TextSpanEditingController({@required TextSpan textSpan})
@@ -106,7 +108,8 @@ class _SelectableTextSelectionGestureDetectorBuilder
           return;
         }
       }
-      if (_state.widget.onTap != null) _state.widget.onTap();
+      if (_state.widget.onTap != null)
+        _state.widget.onTap(details.localPosition);
     } finally {
       _clearHighlight();
     }
@@ -458,7 +461,7 @@ class SelectableTextEx extends StatefulWidget {
   ///
   /// To listen to arbitrary pointer events without competing with the
   /// selectable text's internal gesture detector, use a [Listener].
-  final GestureTapCallback onTap;
+  final GesturePointCallback onTap;
 
   /// {@macro flutter.widgets.edtiableText.scrollPhysics}
   final ScrollPhysics scrollPhysics;

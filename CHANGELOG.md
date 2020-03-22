@@ -1,3 +1,7 @@
+## [1.3.0] - 2020-03-22
+
+* Add position to onTapOther
+
 ## [1.2.0] - 2020-02-09
 
 * Support Highlighted link style
