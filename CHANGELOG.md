@@ -1,3 +1,7 @@
+## [1.3.1] - 2020-03-26
+
+* Improve link tap detection
+
 ## [1.3.0] - 2020-03-22
 
 * Add position to onTapOther
