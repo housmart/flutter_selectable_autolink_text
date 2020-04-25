@@ -25,7 +25,7 @@ class MyHomePage extends StatelessWidget {
       linkStyle: TextStyle(color: Colors.blueAccent),
       highlightedLinkStyle: TextStyle(
         color: Colors.blueAccent,
-        backgroundColor: Color(0x33448AFF),
+        backgroundColor: Colors.blueAccent.withAlpha(0x33),
       ),
       onTap: (url) => launch(url, forceSafariVC: false),
       onLongPress: (url) => Share.share(url),
@@ -54,7 +54,7 @@ email: mail@example.com''',
       linkStyle: TextStyle(color: Colors.purpleAccent),
       highlightedLinkStyle: TextStyle(
         color: Colors.purpleAccent,
-        backgroundColor: Color(0x33E040FB),
+        backgroundColor: Colors.purpleAccent.withAlpha(0x33),
       ),
       onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
       onTap: (url) async {
@@ -73,6 +73,7 @@ email: mail@example.com''',
 ```
 
 ### Customized
+You can customize link pattern.
 
 ```dart
 import 'package:selectable_autolink_text/selectable_autolink_text.dart';
@@ -85,10 +86,10 @@ class MyHomePage extends StatelessWidget {
       '\nHi! @screen_name.'
       ' If you customize the regular expression, you can make them.'
       ' #hash_tag',
-      linkStyle: TextStyle(color: Colors.orangeAccent),
+      linkStyle: TextStyle(color: Colors.deepOrangeAccent),
       highlightedLinkStyle: TextStyle(
-        color: Colors.orangeAccent[700],
-        backgroundColor: Color(0x33FF6D00),
+        color: Colors.deepOrangeAccent,
+        backgroundColor: Colors.deepOrangeAccent.withAlpha(0x33),
       ),
       linkRegExpPattern: '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
       onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
@@ -107,16 +108,16 @@ import 'package:selectable_autolink_text/selectable_autolink_text.dart';
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final blueStyle = const TextStyle(color: Colors.blueAccent);
-    final highlightedStyle = const TextStyle(
-        color: Colors.blueAccent, backgroundColor: Color(0x33448AFF));
-    final pinkStyle = const TextStyle(color: Colors.pink);
-    final boldStyle =
-        const TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
-    final italic2Style =
-        const TextStyle(fontStyle: FontStyle.italic, fontSize: 14);
-    final bigStyle = const TextStyle(fontSize: 18);
-    final regExpPattern = r'\[([^\]]+)\]\(([\S]+)\)';
+    final blueStyle = TextStyle(color: Colors.blueAccent);
+    final highlightedStyle = TextStyle(
+        color: Colors.blueAccent, 
+        backgroundColor: Colors.blueAccent.withAlpha(0x33),
+    );
+    final pinkStyle = TextStyle(color: Colors.pink);
+    final boldStyle = TextStyle(fontWeight: FontWeight.bold);
+    final italicStyle = TextStyle(fontStyle: FontStyle.italic);
+    final bigStyle = TextStyle(fontSize: 20);
+    final regExpPattern = r'\[([^\]]+)\]\(([^\s\)]+)\)';
     final regExp = RegExp(regExpPattern);
 
     return SelectableAutoLinkText(
@@ -126,7 +127,7 @@ More advanced usage
 [This is a link text](https://google.com)
 [This text is bold](bold)
 This text is normal
-[This text is italic](italic2)
+[This text is italic](italic)
 [This text is pink](pink)
 [This text is big](big)''',
       linkRegExpPattern: regExpPattern,
@@ -137,13 +138,13 @@ This text is normal
           final text2 = match.group(2);
           switch (text2) {
             case 'bold':
-              return LinkAttribute(text1, link: null, style: boldStyle);
-            case 'italic2':
-              return LinkAttribute(text1, link: null, style: italic2Style);
+              return LinkAttribute(text1, style: boldStyle);
+            case 'italic':
+              return LinkAttribute(text1, style: italicStyle);
             case 'pink':
-              return LinkAttribute(text1, link: null, style: pinkStyle);
+              return LinkAttribute(text1, style: pinkStyle);
             case 'big':
-              return LinkAttribute(text1, link: null, style: bigStyle);
+              return LinkAttribute(text1, style: bigStyle);
             default:
               if (text2.startsWith('http')) {
                 return LinkAttribute(
@@ -153,11 +154,11 @@ This text is normal
                   highlightedStyle: highlightedStyle,
                 );
               } else {
-                return LinkAttribute(text1, link: null);
+                return LinkAttribute(text1);
               }
           }
         }
-        return LinkAttribute(s, link: null);
+        return LinkAttribute(s);
       },
       onTap: (url) => launch(url, forceSafariVC: false),
       onLongPress: (url) => Share.share(url),
