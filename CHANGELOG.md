@@ -1,3 +1,7 @@
+## [1.3.1+1] - 2020-04-25
+
+* Update example and README.md
+
 ## [1.3.1] - 2020-03-26
 
 * Improve link tap detection
