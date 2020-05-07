@@ -1,3 +1,7 @@
+## [1.3.2] - 2020-05-07
+
+* Support Flutter 1.17.0
+
 ## [1.3.1+1] - 2020-04-25
 
 * Update example and README.md

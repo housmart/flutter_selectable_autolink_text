@@ -89,10 +89,13 @@ class _SelectableTextSelectionGestureDetectorBuilder
       if (delegate.selectionEnabled) {
         switch (Theme.of(_state.context).platform) {
           case TargetPlatform.iOS:
+          case TargetPlatform.macOS:
             renderEditable.selectWordEdge(cause: SelectionChangedCause.tap);
             break;
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.linux:
+          case TargetPlatform.windows:
             renderEditable.selectPosition(cause: SelectionChangedCause.tap);
             break;
         }
@@ -143,6 +146,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
     if (delegate.selectionEnabled) {
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
           renderEditable.selectPositionAt(
             from: details.globalPosition,
             cause: SelectionChangedCause.longPress,
@@ -150,6 +154,8 @@ class _SelectableTextSelectionGestureDetectorBuilder
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
           renderEditable.selectWord(cause: SelectionChangedCause.longPress);
           Feedback.forLongPress(_state.context);
           break;
@@ -162,6 +168,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
     if (delegate.selectionEnabled) {
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
           renderEditable.selectPositionAt(
             from: details.globalPosition,
             cause: SelectionChangedCause.longPress,
@@ -169,6 +176,8 @@ class _SelectableTextSelectionGestureDetectorBuilder
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
           renderEditable.selectWordsInRange(
             from: details.globalPosition - details.offsetFromOrigin,
             to: details.globalPosition,
@@ -573,12 +582,15 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
         if (cause == SelectionChangedCause.longPress) {
           _editableText?.bringIntoView(selection.base);
         }
         return;
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
       // Do nothing.
     }
   }
@@ -639,6 +651,7 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
     switch (themeData.platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
         forcePressEnabled = true;
         textSelectionControls = cupertinoTextSelectionControls;
         paintCursorAboveText = true;
@@ -651,6 +664,8 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
         forcePressEnabled = false;
         textSelectionControls = materialTextSelectionControls;
         paintCursorAboveText = false;
