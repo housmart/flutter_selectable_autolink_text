@@ -1,3 +1,7 @@
+## [1.3.3] - 2020-06-11
+
+* Add global position to onTapOther
+
 ## [1.3.2] - 2020-05-07
 
 * Support Flutter 1.17.0

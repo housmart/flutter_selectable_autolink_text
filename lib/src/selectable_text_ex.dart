@@ -21,7 +21,7 @@ import 'tap_and_long_press.dart';
 /// throughout the codebase.
 const int iOSHorizontalOffset = -2;
 
-typedef GesturePointCallback = void Function(Offset point);
+typedef GesturePointCallback = void Function(Offset local, Offset global);
 
 class _TextSpanEditingController extends TextEditingController {
   _TextSpanEditingController({@required TextSpan textSpan})
@@ -112,7 +112,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
         }
       }
       if (_state.widget.onTap != null)
-        _state.widget.onTap(details.localPosition);
+        _state.widget.onTap(details.localPosition, details.globalPosition);
     } finally {
       _clearHighlight();
     }
