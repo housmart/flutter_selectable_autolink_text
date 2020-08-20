@@ -107,7 +107,6 @@ class _SelectableTextSelectionGestureDetectorBuilder
         final recognizer = span.recognizer;
         if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
           _cancelDoubleTapDown = true;
-          recognizer.onTap();
           return;
         }
       }

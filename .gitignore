@@ -116,3 +116,5 @@ coverage/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 ios/Flutter/flutter_export_environment.sh
+example/ios/Flutter/.last_build_id
+example/.flutter-plugins-dependencies

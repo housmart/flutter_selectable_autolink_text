@@ -1,3 +1,7 @@
+## [1.3.4] - 2020-08-20
+
+* Remove duplication of tap
+
 ## [1.3.3] - 2020-06-11
 
 * Add global position to onTapOther
