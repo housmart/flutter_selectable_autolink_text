@@ -1,3 +1,7 @@
+## [1.3.5] - 2020-10-04
+
+* Update urlRegExpPattern
+
 ## [1.3.4] - 2020-08-20
 
 * Remove duplication of tap
