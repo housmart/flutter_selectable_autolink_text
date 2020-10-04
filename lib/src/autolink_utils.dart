@@ -4,7 +4,7 @@ class AutoLinkUtils {
   AutoLinkUtils._();
 
   static const urlRegExpPattern =
-      r'https?://([\w-]+\.)+[\w-]+(/[\w-./?%&=~#+]*)?';
+      r'https?://([\w-]+\.)+[\w-]+(/[\w-./?%&@\$=~#+]*)?';
   static const phoneNumberRegExpPattern = r'[+0]\d+[\d-]+\d';
   static const emailRegExpPattern = r'[^@\s]+@([^@\s]+\.)+[^@\W]+';
   static const defaultLinkRegExpPattern =
