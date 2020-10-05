@@ -1,7 +1,4 @@
-enum TextElementType {
-  text,
-  link,
-}
+enum TextElementType { text, link }
 
 class TextElement {
   final TextElementType type;

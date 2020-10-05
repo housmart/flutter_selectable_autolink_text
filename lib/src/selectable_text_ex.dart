@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:selectable_autolink_text/src/highlighted_text_span.dart';
 
+import 'highlighted_text_span.dart';
 import 'tap_and_long_press.dart';
 
 /// An eyeballed value that moves the cursor slightly left of where it is
@@ -20,6 +20,8 @@ import 'tap_and_long_press.dart';
 /// This value is in device pixels, not logical pixels as is typically used
 /// throughout the codebase.
 const int iOSHorizontalOffset = -2;
+
+typedef GesturePointCallback = void Function(Offset local, Offset global);
 
 class _TextSpanEditingController extends TextEditingController {
   _TextSpanEditingController({@required TextSpan textSpan})
@@ -87,10 +89,13 @@ class _SelectableTextSelectionGestureDetectorBuilder
       if (delegate.selectionEnabled) {
         switch (Theme.of(_state.context).platform) {
           case TargetPlatform.iOS:
+          case TargetPlatform.macOS:
             renderEditable.selectWordEdge(cause: SelectionChangedCause.tap);
             break;
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.linux:
+          case TargetPlatform.windows:
             renderEditable.selectPosition(cause: SelectionChangedCause.tap);
             break;
         }
@@ -102,11 +107,11 @@ class _SelectableTextSelectionGestureDetectorBuilder
         final recognizer = span.recognizer;
         if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
           _cancelDoubleTapDown = true;
-          recognizer.onTap();
           return;
         }
       }
-      if (_state.widget.onTap != null) _state.widget.onTap();
+      if (_state.widget.onTap != null)
+        _state.widget.onTap(details.localPosition, details.globalPosition);
     } finally {
       _clearHighlight();
     }
@@ -140,6 +145,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
     if (delegate.selectionEnabled) {
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
           renderEditable.selectPositionAt(
             from: details.globalPosition,
             cause: SelectionChangedCause.longPress,
@@ -147,6 +153,8 @@ class _SelectableTextSelectionGestureDetectorBuilder
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
           renderEditable.selectWord(cause: SelectionChangedCause.longPress);
           Feedback.forLongPress(_state.context);
           break;
@@ -159,6 +167,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
     if (delegate.selectionEnabled) {
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
           renderEditable.selectPositionAt(
             from: details.globalPosition,
             cause: SelectionChangedCause.longPress,
@@ -166,6 +175,8 @@ class _SelectableTextSelectionGestureDetectorBuilder
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
           renderEditable.selectWordsInRange(
             from: details.globalPosition - details.offsetFromOrigin,
             to: details.globalPosition,
@@ -458,7 +469,7 @@ class SelectableTextEx extends StatefulWidget {
   ///
   /// To listen to arbitrary pointer events without competing with the
   /// selectable text's internal gesture detector, use a [Listener].
-  final GestureTapCallback onTap;
+  final GesturePointCallback onTap;
 
   /// {@macro flutter.widgets.edtiableText.scrollPhysics}
   final ScrollPhysics scrollPhysics;
@@ -570,12 +581,15 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
         if (cause == SelectionChangedCause.longPress) {
           _editableText?.bringIntoView(selection.base);
         }
         return;
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
       // Do nothing.
     }
   }
@@ -636,6 +650,7 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
     switch (themeData.platform) {
       case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
         forcePressEnabled = true;
         textSelectionControls = cupertinoTextSelectionControls;
         paintCursorAboveText = true;
@@ -648,6 +663,8 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
         forcePressEnabled = false;
         textSelectionControls = materialTextSelectionControls;
         paintCursorAboveText = false;

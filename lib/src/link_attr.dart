@@ -8,7 +8,7 @@ class LinkAttribute {
 
   LinkAttribute(
     this.text, {
-    @required this.link,
+    this.link,
     this.style,
     this.highlightedStyle,
   });

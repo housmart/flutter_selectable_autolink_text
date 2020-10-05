@@ -54,9 +54,9 @@ class MyHomePage extends StatelessWidget {
       'As written below.\n'
       'Dart packages https://pub.dev',
       linkStyle: const TextStyle(color: Colors.blueAccent),
-      highlightedLinkStyle: const TextStyle(
+      highlightedLinkStyle: TextStyle(
         color: Colors.blueAccent,
-        backgroundColor: Color(0x33448AFF),
+        backgroundColor: Colors.blueAccent.withAlpha(0x33),
       ),
       onTap: (url) => launch(url, forceSafariVC: false),
       onLongPress: (url) => Share.share(url),
@@ -70,11 +70,11 @@ Advanced
 You can shrink url like https://github.com/miyakeryo/flutter_selectable_autolink_text
 tel: 012-3456-7890
 email: mail@example.com''',
-      style: const TextStyle(color: Color(0xFF2E7D32)),
+      style: TextStyle(color: Colors.green[800]),
       linkStyle: const TextStyle(color: Colors.purpleAccent),
-      highlightedLinkStyle: const TextStyle(
+      highlightedLinkStyle: TextStyle(
         color: Colors.purpleAccent,
-        backgroundColor: Color(0x33E040FB),
+        backgroundColor: Colors.purpleAccent.withAlpha(0x33),
       ),
       onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
       onTap: (url) async {
@@ -89,8 +89,8 @@ email: mail@example.com''',
         print('🍔LongPress: $url');
         Share.share(url);
       },
-      onTapOther: () {
-        print('🍇️onTapOther');
+      onTapOther: (local, global) {
+        print('🍇️onTapOther: $local, $global');
       },
     );
   }
@@ -102,31 +102,33 @@ email: mail@example.com''',
       ' If you customize the regular expression, you can make them.'
       ' #hash_tag',
       style: const TextStyle(color: Colors.black87),
-      linkStyle: const TextStyle(color: Color(0xFFFF6D00)),
-      highlightedLinkStyle: const TextStyle(
-        color: Color(0xFFFF6D00),
-        backgroundColor: Color(0x33FF6D00),
+      linkStyle: const TextStyle(color: Colors.deepOrangeAccent),
+      highlightedLinkStyle: TextStyle(
+        color: Colors.deepOrangeAccent,
+        backgroundColor: Colors.deepOrangeAccent.withAlpha(0x33),
       ),
       linkRegExpPattern: '(@[\\w]+|#[\\w]+|${AutoLinkUtils.urlRegExpPattern})',
       onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
       onTap: (url) => _alert(context, '🍒Tap', url),
       onLongPress: (url) => _alert(context, '🍩LongPress', url),
-      onDebugMatch: (match) =>
-          print('DebugMatch:[${match.start}-${match.end}]`${match.group(0)}`'),
+      onDebugMatch: (match) {
+        // for debug
+        print('DebugMatch:[${match.start}-${match.end}]`${match.group(0)}`');
+      },
     );
   }
 
   Widget _moreAdvanced(BuildContext context) {
     final blueStyle = const TextStyle(color: Colors.blueAccent);
-    final highlightedStyle = const TextStyle(
-        color: Colors.blueAccent, backgroundColor: Color(0x33448AFF));
+    final highlightedStyle = TextStyle(
+      color: Colors.blueAccent,
+      backgroundColor: Colors.blueAccent.withAlpha(0x33),
+    );
     final pinkStyle = const TextStyle(color: Colors.pink);
-    final boldStyle =
-        const TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
-    final italic2Style =
-        const TextStyle(fontStyle: FontStyle.italic, fontSize: 14);
-    final bigStyle = const TextStyle(fontSize: 18);
-    final regExpPattern = r'\[([^\]]+)\]\(([\S]+)\)';
+    final boldStyle = const TextStyle(fontWeight: FontWeight.bold);
+    final italicStyle = const TextStyle(fontStyle: FontStyle.italic);
+    final bigStyle = const TextStyle(fontSize: 20);
+    final regExpPattern = r'\[([^\]]+)\]\(([^\s\)]+)\)';
     final regExp = RegExp(regExpPattern);
 
     return SelectableAutoLinkText(
@@ -136,7 +138,7 @@ More advanced usage
 [This is a link text](https://google.com)
 [This text is bold](bold)
 This text is normal
-[This text is italic](italic2)
+[This text is italic](italic)
 [This text is pink](pink)
 [This text is big](big)''',
       linkRegExpPattern: regExpPattern,
@@ -147,13 +149,13 @@ This text is normal
           final text2 = match.group(2);
           switch (text2) {
             case 'bold':
-              return LinkAttribute(text1, link: null, style: boldStyle);
-            case 'italic2':
-              return LinkAttribute(text1, link: null, style: italic2Style);
+              return LinkAttribute(text1, style: boldStyle);
+            case 'italic':
+              return LinkAttribute(text1, style: italicStyle);
             case 'pink':
-              return LinkAttribute(text1, link: null, style: pinkStyle);
+              return LinkAttribute(text1, style: pinkStyle);
             case 'big':
-              return LinkAttribute(text1, link: null, style: bigStyle);
+              return LinkAttribute(text1, style: bigStyle);
             default:
               if (text2.startsWith('http')) {
                 return LinkAttribute(
@@ -163,19 +165,19 @@ This text is normal
                   highlightedStyle: highlightedStyle,
                 );
               } else {
-                return LinkAttribute(text1, link: null);
+                return LinkAttribute(text1);
               }
           }
         }
-        return LinkAttribute(s, link: null);
+        return LinkAttribute(s);
       },
       onTap: (url) => launch(url, forceSafariVC: false),
       onLongPress: (url) => Share.share(url),
     );
   }
 
-  Future _alert(BuildContext context, String title, [String message]) async {
-    return await showDialog(
+  Future _alert(BuildContext context, String title, [String message]) {
+    return showDialog(
       context: context,
       builder: (c) {
         return AlertDialog(

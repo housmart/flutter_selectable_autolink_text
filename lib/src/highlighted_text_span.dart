@@ -64,4 +64,21 @@ class HighlightedTextSpan extends TextSpan {
             result;
     return result;
   }
+
+  @override
+  InlineSpan getSpanForPositionVisitor(
+    TextPosition position,
+    Accumulator offset,
+  ) {
+    if (text == null) return null;
+
+    final targetOffset = position.offset;
+    final startOffset = offset.value;
+    final endOffset = offset.value + text.length - 1;
+    if (startOffset <= targetOffset && targetOffset <= endOffset) {
+      return this;
+    }
+    offset.increment(text.length);
+    return null;
+  }
 }

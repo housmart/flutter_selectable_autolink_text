@@ -1,3 +1,31 @@
+## [1.3.5] - 2020-10-04
+
+* Update urlRegExpPattern
+
+## [1.3.4] - 2020-08-20
+
+* Remove duplication of tap
+
+## [1.3.3] - 2020-06-11
+
+* Add global position to onTapOther
+
+## [1.3.2] - 2020-05-07
+
+* Support Flutter 1.17.0
+
+## [1.3.1+1] - 2020-04-25
+
+* Update example and README.md
+
+## [1.3.1] - 2020-03-26
+
+* Improve link tap detection
+
+## [1.3.0] - 2020-03-22
+
+* Add position to onTapOther
+
 ## [1.2.0] - 2020-02-09
 
 * Support Highlighted link style
