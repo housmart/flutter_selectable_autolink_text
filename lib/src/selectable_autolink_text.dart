@@ -34,6 +34,9 @@ class SelectableAutoLinkText extends StatefulWidget {
   /// Called when the user taps on non-link.
   final GesturePointCallback onTapOther;
 
+  /// Called when the user long-press on non-link.
+  final GesturePointCallback onLongPressOther;
+
   /// Style of link text
   final TextStyle linkStyle;
 
@@ -55,8 +58,14 @@ class SelectableAutoLinkText extends StatefulWidget {
   /// {@macro flutter.material.SelectableText.textDirection}
   final TextDirection textDirection;
 
+  /// {@macro flutter.widgets.editableText.textScaleFactor}
+  final double textScaleFactor;
+
   /// {@macro flutter.material.SelectableText.autofocus}
   final bool autofocus;
+
+  /// {@macro flutter.widgets.editableText.minLines}
+  final int minLines;
 
   /// {@macro flutter.material.SelectableText.maxLines}
   final int maxLines;
@@ -66,6 +75,9 @@ class SelectableAutoLinkText extends StatefulWidget {
 
   /// {@macro flutter.material.SelectableText.cursorWidth}
   final double cursorWidth;
+
+  /// {@macro flutter.widgets.editableText.cursorHeight}
+  final double cursorHeight;
 
   /// {@macro flutter.material.SelectableText.cursorRadius}
   final Radius cursorRadius;
@@ -99,6 +111,7 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.onTapOther,
+    this.onLongPressOther,
     this.linkStyle,
     this.highlightedLinkStyle,
     this.focusNode,
@@ -106,10 +119,13 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.strutStyle,
     this.textAlign,
     this.textDirection,
+    this.textScaleFactor,
     this.autofocus = false,
+    this.minLines,
     this.maxLines,
     this.showCursor = false,
     this.cursorWidth = 2.0,
+    this.cursorHeight,
     this.cursorRadius,
     this.cursorColor,
     this.enableInteractiveSelection = true,
@@ -146,10 +162,13 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       strutStyle: widget.strutStyle,
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
+      textScaleFactor: widget.textScaleFactor,
       autofocus: widget.autofocus,
+      minLines: widget.minLines,
       maxLines: widget.maxLines,
       showCursor: widget.showCursor,
       cursorWidth: widget.cursorWidth,
+      cursorHeight: widget.cursorHeight,
       cursorRadius: widget.cursorRadius,
       cursorColor: widget.cursorColor,
       enableInteractiveSelection: widget.enableInteractiveSelection,
@@ -158,6 +177,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       scrollPhysics: widget.scrollPhysics,
       textWidthBasis: widget.textWidthBasis,
       onTap: widget.onTapOther,
+      onLongPress: widget.onLongPressOther,
     );
   }
 

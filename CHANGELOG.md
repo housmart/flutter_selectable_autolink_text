@@ -1,3 +1,7 @@
+## [1.3.6] - 2020-11-26
+
+* Add onLongPressOther
+
 ## [1.3.5] - 2020-10-04
 
 * Update urlRegExpPattern
