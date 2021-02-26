@@ -49,14 +49,15 @@ class _TextSpanEditingController extends TextEditingController {
   }
 }
 
-class _SelectableTextExSelectionGestureDetectorBuilder
+class _SelectableTextSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
-  _SelectableTextExSelectionGestureDetectorBuilder({
-    @required _SelectableTextExState state,
+  _SelectableTextSelectionGestureDetectorBuilder({
+    @required _SelectableTextState state,
   })  : _state = state,
         super(delegate: state);
 
-  final _SelectableTextExState _state;
+  final _SelectableTextState _state;
+
   var _cancelDoubleTapDown = false;
   var _cancelSingleLongTapEnd = false;
 
@@ -149,8 +150,9 @@ class _SelectableTextExSelectionGestureDetectorBuilder
       renderEditable.selectWord(cause: SelectionChangedCause.longPress);
       Feedback.forLongPress(_state.context);
     }
-    if (_state.widget.onLongPress != null)
+    if (_state.widget.onLongPress != null) {
       _state.widget.onLongPress(details.localPosition, details.globalPosition);
+    }
   }
 
   @override
@@ -188,7 +190,7 @@ class _SelectableTextExSelectionGestureDetectorBuilder
 
 /// A run of selectable text with a single style.
 ///
-/// The [SelectableTextEx] widget displays a string of text with a single style.
+/// The [SelectableText] widget displays a string of text with a single style.
 /// The string might break across multiple lines or might all be displayed on
 /// the same line depending on the layout constraints.
 ///
@@ -204,7 +206,7 @@ class _SelectableTextExSelectionGestureDetectorBuilder
 /// {@tool snippet}
 ///
 /// ```dart
-/// SelectableTextEx(
+/// SelectableText(
 ///   'Hello! How are you?',
 ///   textAlign: TextAlign.center,
 ///   style: TextStyle(fontWeight: FontWeight.bold),
@@ -212,7 +214,7 @@ class _SelectableTextExSelectionGestureDetectorBuilder
 /// ```
 /// {@end-tool}
 ///
-/// Using the [SelectableTextEx.rich] constructor, the [SelectableTextEx] widget can
+/// Using the [SelectableText.rich] constructor, the [SelectableText] widget can
 /// display a paragraph with differently styled [TextSpan]s. The sample
 /// that follows displays "Hello beautiful world" with different styles
 /// for each word.
@@ -220,7 +222,7 @@ class _SelectableTextExSelectionGestureDetectorBuilder
 /// {@tool snippet}
 ///
 /// ```dart
-/// const SelectableTextEx.rich(
+/// const SelectableText.rich(
 ///   TextSpan(
 ///     text: 'Hello', // default text style
 ///     children: <TextSpan>[
@@ -234,14 +236,14 @@ class _SelectableTextExSelectionGestureDetectorBuilder
 ///
 /// ## Interactivity
 ///
-/// To make [SelectableTextEx] react to touch events, use callback [onTap] to achieve
+/// To make [SelectableText] react to touch events, use callback [onTap] to achieve
 /// the desired behavior.
 ///
 /// See also:
 ///
 ///  * [Text], which is the non selectable version of this widget.
 ///  * [TextField], which is the editable version of this widget.
-class SelectableTextEx extends StatefulWidget {
+class SelectableText extends StatefulWidget {
   /// Creates a selectable text widget.
   ///
   /// If the [style] argument is null, the text will use the style from the
@@ -251,7 +253,7 @@ class SelectableTextEx extends StatefulWidget {
   /// The [showCursor], [autofocus], [dragStartBehavior], and [data] parameters
   /// must not be null. If specified, the [maxLines] argument must be greater
   /// than zero.
-  const SelectableTextEx(
+  const SelectableText(
     this.data, {
     Key key,
     this.focusNode,
@@ -287,7 +289,7 @@ class SelectableTextEx extends StatefulWidget {
         ),
         assert(
           data != null,
-          'A non-null String must be provided to a SelectableTextEx widget.',
+          'A non-null String must be provided to a SelectableText widget.',
         ),
         textSpan = null,
         toolbarOptions = toolbarOptions ??
@@ -303,7 +305,7 @@ class SelectableTextEx extends StatefulWidget {
   /// [textSpan.children]. Other type of [InlineSpan] is not allowed.
   ///
   /// The [autofocus] and [dragStartBehavior] arguments must not be null.
-  const SelectableTextEx.rich(
+  const SelectableText.rich(
     this.textSpan, {
     Key key,
     this.focusNode,
@@ -339,7 +341,7 @@ class SelectableTextEx extends StatefulWidget {
         ),
         assert(
           textSpan != null,
-          'A non-null TextSpan must be provided to a SelectableTextEx.rich widget.',
+          'A non-null TextSpan must be provided to a SelectableText.rich widget.',
         ),
         data = null,
         toolbarOptions = toolbarOptions ??
@@ -473,7 +475,7 @@ class SelectableTextEx extends StatefulWidget {
   final TextWidthBasis textWidthBasis;
 
   @override
-  _SelectableTextExState createState() => _SelectableTextExState();
+  _SelectableTextState createState() => _SelectableTextState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -517,7 +519,7 @@ class SelectableTextEx extends StatefulWidget {
   }
 }
 
-class _SelectableTextExState extends State<SelectableTextEx>
+class _SelectableTextState extends State<SelectableText>
     with AutomaticKeepAliveClientMixin
     implements TextSelectionGestureDetectorBuilderDelegate {
   EditableTextState get _editableText => editableTextKey.currentState;
@@ -530,7 +532,7 @@ class _SelectableTextExState extends State<SelectableTextEx>
 
   bool _showSelectionHandles = false;
 
-  _SelectableTextExSelectionGestureDetectorBuilder
+  _SelectableTextSelectionGestureDetectorBuilder
       _selectionGestureDetectorBuilder;
 
   // API for TextSelectionGestureDetectorBuilderDelegate.
@@ -549,14 +551,14 @@ class _SelectableTextExState extends State<SelectableTextEx>
   void initState() {
     super.initState();
     _selectionGestureDetectorBuilder =
-        _SelectableTextExSelectionGestureDetectorBuilder(state: this);
+        _SelectableTextSelectionGestureDetectorBuilder(state: this);
     _controller = _TextSpanEditingController(
         textSpan: widget.textSpan ?? TextSpan(text: widget.data));
     _controller.addListener(_onControllerChanged);
   }
 
   @override
-  void didUpdateWidget(SelectableTextEx oldWidget) {
+  void didUpdateWidget(SelectableText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.data != oldWidget.data ||
         widget.textSpan != oldWidget.textSpan) {
@@ -648,7 +650,7 @@ class _SelectableTextExState extends State<SelectableTextEx>
       return _controller._textSpan
           .visitChildren((InlineSpan span) => span is TextSpan);
     }(),
-        'SelectableTextEx only supports TextSpan; Other type of InlineSpan is not allowed');
+        'SelectableText only supports TextSpan; Other type of InlineSpan is not allowed');
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasDirectionality(context));
     assert(

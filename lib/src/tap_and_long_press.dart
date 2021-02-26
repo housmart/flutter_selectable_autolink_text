@@ -8,8 +8,20 @@ class TapAndLongPressGestureRecognizer extends TapGestureRecognizer {
 
   GestureLongPressCallback onLongPress;
 
-  final _longPressDeadline = kLongPressTimeout;
+  final _longPressDeadline = const Duration(milliseconds: 510);
   Timer _longPressTimer;
+
+  @override
+  bool isPointerAllowed(PointerDownEvent event) {
+    switch (event.buttons) {
+      case kPrimaryButton:
+        if (onLongPress == null) return false;
+        break;
+      default:
+        return false;
+    }
+    return super.isPointerAllowed(event);
+  }
 
   @override
   void addAllowedPointer(PointerDownEvent event) {
