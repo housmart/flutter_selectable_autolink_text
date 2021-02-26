@@ -1,3 +1,7 @@
+## [1.3.7+1] - 2021-02-26
+
+* Fix tap event
+
 ## [1.3.7] - 2021-02-26
 
 * Fix duplicate longPress events

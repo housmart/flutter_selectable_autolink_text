@@ -254,12 +254,9 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
     }
     final recognizer = TapAndLongPressGestureRecognizer();
     _gestureRecognizers.add(recognizer);
-    if (widget.onTap != null) {
-      recognizer.onTap = () => widget.onTap(link);
-    }
-    if (widget.onLongPress != null) {
-      recognizer.onLongPress = () => widget.onLongPress(link);
-    }
+    recognizer.onTap = () => widget.onTap?.call(link);
+    recognizer.onLongPress = () => widget.onLongPress?.call(link);
+
     return recognizer;
   }
 

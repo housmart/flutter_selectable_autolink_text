@@ -109,7 +109,12 @@ class _SelectableTextSelectionGestureDetectorBuilder
       final span = renderEditable.text.getSpanForPosition(position);
       if (span is TextSpan) {
         final recognizer = span.recognizer;
-        if (recognizer is TapGestureRecognizer && recognizer.onTap != null) {
+        GestureTapCallback onTap;
+        if (recognizer is TapGestureRecognizer)
+          onTap = recognizer.onTap;
+        else if (recognizer is TapAndLongPressGestureRecognizer)
+          onTap = recognizer.onTap;
+        if (onTap != null) {
           _cancelDoubleTapDown = true;
           return;
         }
