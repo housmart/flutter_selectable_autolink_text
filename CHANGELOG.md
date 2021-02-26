@@ -1,3 +1,7 @@
+## [1.3.7] - 2021-02-26
+
+* Fix duplicate longPress events
+
 ## [1.3.6] - 2020-11-26
 
 * Add onLongPressOther

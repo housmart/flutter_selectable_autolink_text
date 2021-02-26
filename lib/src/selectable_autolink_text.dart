@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'autolink_utils.dart';
 import 'highlighted_text_span.dart';
 import 'link_attr.dart';
-import 'selectable_text_ex.dart';
+import 'selectable_text.dart' as my show SelectableText;
+import 'selectable_text.dart' hide SelectableText;
 import 'tap_and_long_press.dart';
 import 'text_element.dart';
 
@@ -153,7 +154,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableTextEx.rich(
+    return my.SelectableText.rich(
       TextSpan(
         children: _createTextSpans(),
       ),
