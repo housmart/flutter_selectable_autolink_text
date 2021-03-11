@@ -11,7 +11,7 @@ import 'text_element.dart';
 
 typedef OnOpenLinkFunction = void Function(String link);
 typedef OnTransformLinkFunction = String Function(String link);
-typedef OnTransformLinkAttributeFunction = LinkAttribute Function(String text);
+typedef OnTransformLinkAttributeFunction = LinkAttribute Function(String? text);
 typedef OnDebugMatchFunction = void Function(Match match);
 
 class SelectableAutoLinkText extends StatefulWidget {
@@ -24,52 +24,52 @@ class SelectableAutoLinkText extends StatefulWidget {
 
   /// Transform the display of Link
   /// Called when Link is displayed
-  final OnTransformLinkAttributeFunction onTransformDisplayLink;
+  final OnTransformLinkAttributeFunction? onTransformDisplayLink;
 
   /// Called when the user taps on link.
-  final OnOpenLinkFunction onTap;
+  final OnOpenLinkFunction? onTap;
 
   /// Called when the user long-press on link.
-  final OnOpenLinkFunction onLongPress;
+  final OnOpenLinkFunction? onLongPress;
 
   /// Called when the user taps on non-link.
-  final GesturePointCallback onTapOther;
+  final GesturePointCallback? onTapOther;
 
   /// Called when the user long-press on non-link.
-  final GesturePointCallback onLongPressOther;
+  final GesturePointCallback? onLongPressOther;
 
   /// Style of link text
-  final TextStyle linkStyle;
+  final TextStyle? linkStyle;
 
   /// Style of highlighted link text
-  final TextStyle highlightedLinkStyle;
+  final TextStyle? highlightedLinkStyle;
 
   /// {@macro flutter.material.SelectableText.focusNode}
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
 
   /// {@macro flutter.material.SelectableText.style}
-  final TextStyle style;
+  final TextStyle? style;
 
   /// {@macro flutter.material.SelectableText.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// {@macro flutter.material.SelectableText.textAlign}
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// {@macro flutter.material.SelectableText.textDirection}
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// {@macro flutter.widgets.editableText.textScaleFactor}
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// {@macro flutter.material.SelectableText.autofocus}
   final bool autofocus;
 
   /// {@macro flutter.widgets.editableText.minLines}
-  final int minLines;
+  final int? minLines;
 
   /// {@macro flutter.material.SelectableText.maxLines}
-  final int maxLines;
+  final int? maxLines;
 
   /// {@macro flutter.material.SelectableText.showCursor}
   final bool showCursor;
@@ -78,13 +78,13 @@ class SelectableAutoLinkText extends StatefulWidget {
   final double cursorWidth;
 
   /// {@macro flutter.widgets.editableText.cursorHeight}
-  final double cursorHeight;
+  final double? cursorHeight;
 
   /// {@macro flutter.material.SelectableText.cursorRadius}
-  final Radius cursorRadius;
+  final Radius? cursorRadius;
 
   /// {@macro flutter.material.SelectableText.cursorColor}
-  final Color cursorColor;
+  final Color? cursorColor;
 
   /// {@macro flutter.material.SelectableText.enableInteractiveSelection}
   final bool enableInteractiveSelection;
@@ -93,21 +93,21 @@ class SelectableAutoLinkText extends StatefulWidget {
   final DragStartBehavior dragStartBehavior;
 
   /// {@macro flutter.material.SelectableText.toolbarOptions}
-  final ToolbarOptions toolbarOptions;
+  final ToolbarOptions? toolbarOptions;
 
   /// {@macro flutter.material.SelectableText.scrollPhysics}
-  final ScrollPhysics scrollPhysics;
+  final ScrollPhysics? scrollPhysics;
 
   /// {@macro flutter.material.SelectableText.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
 
   /// For debugging linkRegExp
-  final OnDebugMatchFunction onDebugMatch;
+  final OnDebugMatchFunction? onDebugMatch;
 
   SelectableAutoLinkText(
     this.text, {
-    Key key,
-    String linkRegExpPattern,
+    Key? key,
+    String? linkRegExpPattern,
     this.onTransformDisplayLink,
     this.onTap,
     this.onLongPress,
@@ -198,7 +198,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       var index = 0;
       matches.forEach((match) {
         if (widget.onDebugMatch != null) {
-          widget.onDebugMatch(match);
+          widget.onDebugMatch!(match);
         }
 
         if (match.start != 0) {
@@ -231,7 +231,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       (e) {
         var isLink = e.type == TextElementType.link;
         final linkAttr = (isLink && widget.onTransformDisplayLink != null)
-            ? widget.onTransformDisplayLink(e.text)
+            ? widget.onTransformDisplayLink!(e.text)
             : null;
         final link = linkAttr != null ? linkAttr?.link : e.text;
         isLink &= link != null;
@@ -248,14 +248,14 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
     ).toList();
   }
 
-  TapAndLongPressGestureRecognizer _createGestureRecognizer(String link) {
+  TapAndLongPressGestureRecognizer? _createGestureRecognizer(String? link) {
     if (widget.onTap == null && widget.onLongPress == null) {
       return null;
     }
     final recognizer = TapAndLongPressGestureRecognizer();
     _gestureRecognizers.add(recognizer);
-    recognizer.onTap = () => widget.onTap?.call(link);
-    recognizer.onLongPress = () => widget.onLongPress?.call(link);
+    recognizer.onTap = () => widget.onTap?.call(link!);
+    recognizer.onLongPress = () => widget.onLongPress?.call(link!);
 
     return recognizer;
   }

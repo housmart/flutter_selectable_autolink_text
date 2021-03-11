@@ -145,27 +145,27 @@ This text is normal
       onTransformDisplayLink: (s) {
         final match = regExp.firstMatch(s);
         if (match?.groupCount == 2) {
-          final text1 = match.group(1);
+          final text1 = match!.group(1);
           final text2 = match.group(2);
           switch (text2) {
             case 'bold':
-              return LinkAttribute(text1, style: boldStyle);
+              return LinkAttribute(text1!, style: boldStyle);
             case 'italic':
-              return LinkAttribute(text1, style: italicStyle);
+              return LinkAttribute(text1!, style: italicStyle);
             case 'pink':
-              return LinkAttribute(text1, style: pinkStyle);
+              return LinkAttribute(text1!, style: pinkStyle);
             case 'big':
-              return LinkAttribute(text1, style: bigStyle);
+              return LinkAttribute(text1!, style: bigStyle);
             default:
-              if (text2.startsWith('http')) {
+              if (text2!.startsWith('http')) {
                 return LinkAttribute(
-                  text1,
+                  text1!,
                   link: text2,
                   style: blueStyle,
                   highlightedStyle: highlightedStyle,
                 );
               } else {
-                return LinkAttribute(text1);
+                return LinkAttribute(text1!);
               }
           }
         }
@@ -176,7 +176,7 @@ This text is normal
     );
   }
 
-  Future _alert(BuildContext context, String title, [String message]) {
+  Future _alert(BuildContext context, String title, [String? message]) {
     return showDialog(
       context: context,
       builder: (c) {
