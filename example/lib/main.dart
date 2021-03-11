@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:selectable_autolink_text/selectable_autolink_text.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,7 +60,7 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Colors.blueAccent.withAlpha(0x33),
       ),
       onTap: (url) => launch(url, forceSafariVC: false),
-      onLongPress: (url) => Share.share(url),
+      onLongPress: (url) => _share(url),
     );
   }
 
@@ -87,7 +88,7 @@ email: mail@example.com''',
       },
       onLongPress: (url) {
         print('🍔LongPress: $url');
-        Share.share(url);
+        _share(url);
       },
       onTapOther: (local, global) {
         print('🍇️onTapOther: $local, $global');
@@ -172,7 +173,7 @@ This text is normal
         return LinkAttribute(s);
       },
       onTap: (url) => launch(url, forceSafariVC: false),
-      onLongPress: (url) => Share.share(url),
+      onLongPress: (url) => _share(url),
     );
   }
 
@@ -192,5 +193,13 @@ This text is normal
         );
       },
     );
+  }
+
+  Future _share(String text) async {
+    try {
+      return await Share.share(text);
+    } on MissingPluginException catch (e) {
+      print("😡 $e");
+    }
   }
 }
