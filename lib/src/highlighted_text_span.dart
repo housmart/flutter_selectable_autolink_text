@@ -3,11 +3,11 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 class _StyleHelper {
-  final TextStyle normalStyle;
-  final TextStyle highlightedStyle;
+  final TextStyle? normalStyle;
+  final TextStyle? highlightedStyle;
   var isHighlighted = false;
 
-  TextStyle get style =>
+  TextStyle? get style =>
       (isHighlighted ? highlightedStyle : normalStyle) ?? normalStyle;
 
   _StyleHelper({this.normalStyle, this.highlightedStyle});
@@ -17,12 +17,12 @@ class HighlightedTextSpan extends TextSpan {
   final _StyleHelper _styleHelper;
 
   HighlightedTextSpan({
-    String text,
-    List<InlineSpan> children,
-    TextStyle style,
-    GestureRecognizer recognizer,
-    String semanticsLabel,
-    TextStyle highlightedStyle,
+    String? text,
+    List<InlineSpan>? children,
+    TextStyle? style,
+    GestureRecognizer? recognizer,
+    String? semanticsLabel,
+    TextStyle? highlightedStyle,
   })  : _styleHelper = _StyleHelper(
           normalStyle: style,
           highlightedStyle: highlightedStyle,
@@ -36,7 +36,7 @@ class HighlightedTextSpan extends TextSpan {
         );
 
   @override
-  TextStyle get style => _styleHelper.style;
+  TextStyle? get style => _styleHelper.style;
 
   bool get isHighlighted => _styleHelper.isHighlighted;
   set isHighlighted(bool value) => _styleHelper.isHighlighted = value;
@@ -60,13 +60,14 @@ class HighlightedTextSpan extends TextSpan {
       span.isHighlighted = false;
     }
     result =
-        span.children?.where((c) => clearHighlight(c))?.isNotEmpty == true ||
+        span.children?.where((c) => clearHighlight(c as TextSpan)).isNotEmpty ==
+                true ||
             result;
     return result;
   }
 
   @override
-  InlineSpan getSpanForPositionVisitor(
+  InlineSpan? getSpanForPositionVisitor(
     TextPosition position,
     Accumulator offset,
   ) {
@@ -74,11 +75,11 @@ class HighlightedTextSpan extends TextSpan {
 
     final targetOffset = position.offset;
     final startOffset = offset.value;
-    final endOffset = offset.value + text.length - 1;
+    final endOffset = offset.value + text!.length - 1;
     if (startOffset <= targetOffset && targetOffset <= endOffset) {
       return this;
     }
-    offset.increment(text.length);
+    offset.increment(text!.length);
     return null;
   }
 }
