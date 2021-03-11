@@ -184,11 +184,9 @@ This text is normal
           title: Text(title),
           content: message != null ? Text(message) : null,
           actions: [
-            FlatButton(
-              color: Colors.lightBlueAccent,
-              textColor: Colors.white,
+            TextButton(
               child: const Text('Close'),
-              onPressed: () => Navigator.pop(c),
+              onPressed: Navigator.of(c).pop,
             ),
           ],
         );

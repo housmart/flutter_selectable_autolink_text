@@ -10,8 +10,8 @@ dependencies:
     sdk: flutter
   selectable_autolink_text:
     path: ../../flutter_selectable_autolink_text
-  url_launcher: ^5.4.10
-  share: ^0.6.5+4
+  url_launcher: ^6.0.2
+  share: ^2.0.1
 
 flutter:
   uses-material-design: true

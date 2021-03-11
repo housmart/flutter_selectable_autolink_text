@@ -11,7 +11,7 @@ import 'text_element.dart';
 
 typedef OnOpenLinkFunction = void Function(String link);
 typedef OnTransformLinkFunction = String Function(String link);
-typedef OnTransformLinkAttributeFunction = LinkAttribute Function(String? text);
+typedef OnTransformLinkAttributeFunction = LinkAttribute Function(String text);
 typedef OnDebugMatchFunction = void Function(Match match);
 
 class SelectableAutoLinkText extends StatefulWidget {
@@ -50,56 +50,62 @@ class SelectableAutoLinkText extends StatefulWidget {
   /// {@macro flutter.material.SelectableText.style}
   final TextStyle? style;
 
-  /// {@macro flutter.material.SelectableText.strutStyle}
+  /// {@macro flutter.widgets.editableText.strutStyle}
   final StrutStyle? strutStyle;
 
-  /// {@macro flutter.material.SelectableText.textAlign}
+  /// {@macro flutter.widgets.editableText.textAlign}
   final TextAlign? textAlign;
 
-  /// {@macro flutter.material.SelectableText.textDirection}
+  /// {@macro flutter.widgets.editableText.textDirection}
   final TextDirection? textDirection;
 
   /// {@macro flutter.widgets.editableText.textScaleFactor}
   final double? textScaleFactor;
 
-  /// {@macro flutter.material.SelectableText.autofocus}
+  /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
 
   /// {@macro flutter.widgets.editableText.minLines}
   final int? minLines;
 
-  /// {@macro flutter.material.SelectableText.maxLines}
+  /// {@macro flutter.widgets.editableText.maxLines}
   final int? maxLines;
 
-  /// {@macro flutter.material.SelectableText.showCursor}
+  /// {@macro flutter.widgets.editableText.selectionControls}
+  final TextSelectionControls? selectionControls;
+
+  /// {@macro flutter.widgets.editableText.showCursor}
   final bool showCursor;
 
-  /// {@macro flutter.material.SelectableText.cursorWidth}
+  /// {@macro flutter.widgets.editableText.cursorWidth}
   final double cursorWidth;
 
   /// {@macro flutter.widgets.editableText.cursorHeight}
   final double? cursorHeight;
 
-  /// {@macro flutter.material.SelectableText.cursorRadius}
+  /// {@macro flutter.widgets.editableText.cursorRadius}
   final Radius? cursorRadius;
 
   /// {@macro flutter.material.SelectableText.cursorColor}
   final Color? cursorColor;
 
-  /// {@macro flutter.material.SelectableText.enableInteractiveSelection}
+  /// {@macro flutter.widgets.editableText.enableInteractiveSelection}
   final bool enableInteractiveSelection;
 
-  /// {@macro flutter.material.SelectableText.dragStartBehavior}
+  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
 
   /// {@macro flutter.material.SelectableText.toolbarOptions}
   final ToolbarOptions? toolbarOptions;
 
-  /// {@macro flutter.material.SelectableText.scrollPhysics}
+  /// {@macro flutter.widgets.editableText.scrollPhysics}
   final ScrollPhysics? scrollPhysics;
 
-  /// {@macro flutter.material.SelectableText.textWidthBasis}
+  /// {@macro flutter.painting.textPainter.textWidthBasis}
   final TextWidthBasis? textWidthBasis;
+
+  /// {@macro flutter.widgets.editableText.onSelectionChanged}
+  final SelectionChangedCallback? onSelectionChanged;
 
   /// For debugging linkRegExp
   final OnDebugMatchFunction? onDebugMatch;
@@ -124,6 +130,7 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.autofocus = false,
     this.minLines,
     this.maxLines,
+    this.selectionControls,
     this.showCursor = false,
     this.cursorWidth = 2.0,
     this.cursorHeight,
@@ -134,6 +141,7 @@ class SelectableAutoLinkText extends StatefulWidget {
     this.toolbarOptions,
     this.scrollPhysics,
     this.textWidthBasis,
+    this.onSelectionChanged,
     this.onDebugMatch,
   })  : linkRegExp =
             RegExp(linkRegExpPattern ?? AutoLinkUtils.defaultLinkRegExpPattern),
@@ -167,6 +175,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       autofocus: widget.autofocus,
       minLines: widget.minLines,
       maxLines: widget.maxLines,
+      selectionControls: widget.selectionControls,
       showCursor: widget.showCursor,
       cursorWidth: widget.cursorWidth,
       cursorHeight: widget.cursorHeight,
@@ -179,6 +188,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
       textWidthBasis: widget.textWidthBasis,
       onTap: widget.onTapOther,
       onLongPress: widget.onLongPressOther,
+      onSelectionChanged: widget.onSelectionChanged,
     );
   }
 
@@ -209,7 +219,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
         }
         elements.add(TextElement(
           type: TextElementType.link,
-          text: match.group(0),
+          text: match.group(0) ?? '',
         ));
         index = match.end;
       });
@@ -233,7 +243,7 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
         final linkAttr = (isLink && widget.onTransformDisplayLink != null)
             ? widget.onTransformDisplayLink!(e.text)
             : null;
-        final link = linkAttr != null ? linkAttr?.link : e.text;
+        final link = linkAttr != null ? linkAttr.link : e.text;
         isLink &= link != null;
 
         return HighlightedTextSpan(
@@ -242,20 +252,20 @@ class _SelectableAutoLinkTextState extends State<SelectableAutoLinkText> {
           highlightedStyle: isLink
               ? (linkAttr?.highlightedStyle ?? widget.highlightedLinkStyle)
               : null,
-          recognizer: isLink ? _createGestureRecognizer(link) : null,
+          recognizer: isLink ? _createGestureRecognizer(link!) : null,
         );
       },
     ).toList();
   }
 
-  TapAndLongPressGestureRecognizer? _createGestureRecognizer(String? link) {
+  TapAndLongPressGestureRecognizer? _createGestureRecognizer(String link) {
     if (widget.onTap == null && widget.onLongPress == null) {
       return null;
     }
     final recognizer = TapAndLongPressGestureRecognizer();
     _gestureRecognizers.add(recognizer);
-    recognizer.onTap = () => widget.onTap?.call(link!);
-    recognizer.onLongPress = () => widget.onLongPress?.call(link!);
+    recognizer.onTap = () => widget.onTap?.call(link);
+    recognizer.onLongPress = () => widget.onLongPress?.call(link);
 
     return recognizer;
   }

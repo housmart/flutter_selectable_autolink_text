@@ -60,7 +60,8 @@ class HighlightedTextSpan extends TextSpan {
       span.isHighlighted = false;
     }
     result =
-        span.children?.where((c) => clearHighlight(c as TextSpan))?.isNotEmpty == true ||
+        span.children?.where((c) => clearHighlight(c as TextSpan)).isNotEmpty ==
+                true ||
             result;
     return result;
   }
