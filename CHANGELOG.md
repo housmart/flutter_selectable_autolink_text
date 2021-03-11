@@ -1,3 +1,7 @@
+## [2.0.0] - 2021-03-11
+
+* Migrate to null safety
+
 ## [1.3.7+1] - 2021-02-26
 
 * Fix tap event
