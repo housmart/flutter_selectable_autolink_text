@@ -1,3 +1,7 @@
+## [2.1.0] - 2021-05-19
+
+* Fix buildTextSpan
+
 ## [2.0.0] - 2021-03-11
 
 * Migrate to null safety
