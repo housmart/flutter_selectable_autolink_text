@@ -191,7 +191,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
   }
 
   void _clearHighlight() {
-    if (HighlightedTextSpan.clearHighlight(renderEditable.text!)) {
+    if (HighlightedTextSpan.clearHighlight(renderEditable.text as TextSpan)) {
       renderEditable.systemFontsDidChange();
     }
   }
