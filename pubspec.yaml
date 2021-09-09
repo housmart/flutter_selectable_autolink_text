@@ -1,6 +1,6 @@
 name: selectable_autolink_text
 description: Generate inline links that can be selected and tapped in text for Flutter.
-version: 2.2.0
+version: 2.3.0
 homepage: https://github.com/miyakeryo/flutter_selectable_autolink_text
 
 environment:

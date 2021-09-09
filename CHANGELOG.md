@@ -1,3 +1,7 @@
+## [2.3.0] - 2021-09-09
+
+* Support Flutter 2.5.0
+
 ## [2.2.0] - 2021-05-19
 
 * Fix SelectableText
