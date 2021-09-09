@@ -31,13 +31,23 @@ class _TextSpanEditingController extends TextEditingController {
   final TextSpan _textSpan;
 
   @override
-  TextSpan buildTextSpan({TextStyle? style, required bool withComposing}) {
+  TextSpan buildTextSpan(
+      {required BuildContext context,
+      TextStyle? style,
+      required bool withComposing}) {
     // This does not care about composing.
     return TextSpan(
       style: style,
       children: <TextSpan>[_textSpan],
     );
   }
+  /* TextSpan buildTextSpan({TextStyle? style, required bool withComposing}) {
+    // This does not care about composing.
+    return TextSpan(
+      style: style,
+      children: <TextSpan>[_textSpan],
+    );
+  } */
 
   @override
   set text(String? newText) {
@@ -50,7 +60,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
   _SelectableTextSelectionGestureDetectorBuilder({
     required _SelectableTextState state,
-  })   : _state = state,
+  })  : _state = state,
         super(delegate: state);
 
   final _SelectableTextState _state;
@@ -181,7 +191,7 @@ class _SelectableTextSelectionGestureDetectorBuilder
   }
 
   void _clearHighlight() {
-    if (HighlightedTextSpan.clearHighlight(renderEditable.text!)) {
+    if (HighlightedTextSpan.clearHighlight(renderEditable.text as TextSpan)) {
       renderEditable.systemFontsDidChange();
     }
   }
