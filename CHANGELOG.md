@@ -1,3 +1,7 @@
+## [2.2.0] - 2021-05-19
+
+* Fix SelectableText
+
 ## [2.1.0] - 2021-05-19
 
 * Fix buildTextSpan
